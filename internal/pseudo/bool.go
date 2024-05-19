@@ -1,7 +1,7 @@
 package pseudo
 
 import (
-	"github.com/msanft/proton/internal/primitives"
+	"github.com/msanft/proton/internal/primitive"
 )
 
 // Bool is a pseudo-type for a boolean value used by Nix. Under the
@@ -14,13 +14,13 @@ func (b Bool) MarshalNix() ([]byte, error) {
 	if b {
 		i = 1
 	}
-	return primitives.NewInt(i).MarshalNix()
+	return primitive.NewInt(i).MarshalNix()
 }
 
 // UnmarshalNix deserializes the pseudo-boolean from the Nix wire format.
 // A value of 0 is considered false, all other values are considered true.
 func (b *Bool) UnmarshalNix(raw []byte) error {
-	var i primitives.Int
+	var i primitive.Int
 	if err := i.UnmarshalNix(raw); err != nil {
 		return err
 	}

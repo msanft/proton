@@ -1,5 +1,8 @@
-package opcodes
+package opcode
 
+import "github.com/msanft/proton/internal/primitive"
+
+// Opcode represent an operation code used in the Nix daemon protocol.
 type Opcode uint64
 
 const (
@@ -32,3 +35,18 @@ const (
 	AddBuildLog              Opcode = 45
 	BuildPathsWithResults    Opcode = 46
 )
+
+// MarshalNix serializes the opcode to the Nix wire format.
+func (o Opcode) MarshalNix() ([]byte, error) {
+	return primitive.NewInt(uint64(o)).MarshalNix()
+}
+
+// UnmarshalNix deserializes the opcode from the Nix wire format.
+func (o *Opcode) UnmarshalNix(raw []byte) error {
+	var i primitive.Int
+	if err := i.UnmarshalNix(raw); err != nil {
+		return err
+	}
+	*o = Opcode(i.Value)
+	return nil
+}

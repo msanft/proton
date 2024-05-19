@@ -1,4 +1,4 @@
-package primitives
+package primitive
 
 import (
 	"testing"
@@ -23,7 +23,7 @@ func TestIntUnmarshalNix(t *testing.T) {
 	require := require.New(t)
 	assert := assert.New(t)
 
-	i := Int{}
+	var i Int
 
 	err := i.UnmarshalNix([]byte{42, 0, 0, 0, 0, 0, 0, 0})
 	require.NoError(err)

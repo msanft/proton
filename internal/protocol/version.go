@@ -1,6 +1,10 @@
 package protocol
 
-import "github.com/msanft/proton/internal/primitives"
+import (
+	"fmt"
+
+	"github.com/msanft/proton/internal/primitive"
+)
 
 const (
 	// Major is the major version number of the Nix daemon protocol supported by this implementation.
@@ -28,16 +32,21 @@ func OwnVersion() Version {
 // MarshalNix serializes the protocol version to the Nix wire format.
 func (v Version) MarshalNix() ([]byte, error) {
 	i := uint64(v.major)<<8 | uint64(v.minor)
-	return primitives.NewInt(i).MarshalNix()
+	return primitive.NewInt(i).MarshalNix()
 }
 
 // UnmarshalNix deserializes the protocol version from the Nix wire format.
 func (v *Version) UnmarshalNix(raw []byte) error {
-	var i primitives.Int
+	var i primitive.Int
 	if err := i.UnmarshalNix(raw); err != nil {
 		return err
 	}
 	v.major = uint8(i.Value >> 8)
 	v.minor = uint8(i.Value)
 	return nil
+}
+
+// String returns a string representation of the protocol version.
+func (v Version) String() string {
+	return fmt.Sprintf("v%d.%d", v.major, v.minor)
 }

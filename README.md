@@ -8,4 +8,4 @@ An implementation of the Nix Daemon Protocol in pure Go.
 
 ## Credits
 
-Almost all the code in this repository stems from the awesome [nix-remote-rust](https://github.com/tweag/nix-remote-rust) project by [Tweag](https://www.tweag.io/).
+A lot of the code in this repository stems from the awesome [nix-remote-rust](https://github.com/tweag/nix-remote-rust) project by [Tweag](https://www.tweag.io/).

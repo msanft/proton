@@ -20,3 +20,8 @@ func (s *String) UnmarshalNix(raw []byte) error {
 	*s = String(bbuf.Buf)
 	return nil
 }
+
+// Size returns the size of the pseudo-string in bytes.
+func (s String) Size() uint64 {
+	return primitive.NewByteBuf([]byte(s)).Size()
+}

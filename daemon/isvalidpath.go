@@ -3,7 +3,6 @@ package daemon
 import (
 	"fmt"
 
-	"github.com/msanft/proton/internal/primitive"
 	"github.com/msanft/proton/internal/protocol/opcode"
 	"github.com/msanft/proton/internal/protocol/operation"
 	"github.com/msanft/proton/internal/pseudo"
@@ -20,14 +19,22 @@ func (c *Conn) IsValidPath(path string) (bool, error) {
 		return false, fmt.Errorf("write store path to connection: %w", err)
 	}
 
-	// TODO: This seems to be some kind of response identifier? need to check
-	var i primitive.Int
-	_ = c.readNNix(&i, 8)
-
-	b, err := c.readNixBool()
+	rest, err := c.ParseStderr()
 	if err != nil {
-		return false, fmt.Errorf("read validity: %w", err)
+		return false, fmt.Errorf("receive stderr: %w", err)
 	}
 
-	return bool(b), nil
+	var validity pseudo.Bool
+	if rest == nil {
+		validity, err = c.readNixBool()
+		if err != nil {
+			return false, fmt.Errorf("read validity: %w", err)
+		}
+	} else {
+		if err := validity.UnmarshalNix(rest); err != nil {
+			return false, fmt.Errorf("unmarshal validity: %w", err)
+		}
+	}
+
+	return bool(validity), nil
 }

@@ -23,10 +23,21 @@ func TestIntUnmarshalNix(t *testing.T) {
 	require := require.New(t)
 	assert := assert.New(t)
 
-	var i Int
+	t.Run("success", func(t *testing.T) {
+		var i Int
 
-	err := i.UnmarshalNix([]byte{42, 0, 0, 0, 0, 0, 0, 0})
-	require.NoError(err)
+		err := i.UnmarshalNix([]byte{42, 0, 0, 0, 0, 0, 0, 0})
+		require.NoError(err)
 
-	assert.Equal(uint64(42), i.Value)
+		assert.Equal(uint64(42), i.Value)
+	})
+
+	t.Run("more than 8 bytes", func(t *testing.T) {
+		var i Int
+
+		err := i.UnmarshalNix([]byte{42, 0, 0, 0, 0, 0, 0, 0, 13, 37})
+		require.NoError(err)
+
+		assert.Equal(uint64(42), i.Value)
+	})
 }

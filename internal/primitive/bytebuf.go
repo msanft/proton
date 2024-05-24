@@ -45,3 +45,12 @@ func (b *ByteBuf) UnmarshalNix(raw []byte) error {
 	b.Buf = raw[8 : 8+b.Len.Value]
 	return nil
 }
+
+// Size returns the size of the byte buffer in bytes.
+func (b ByteBuf) Size() uint64 {
+	paddedLen := uint64(len(b.Buf))
+	if paddedLen%8 != 0 {
+		paddedLen += 8 - paddedLen%8
+	}
+	return 8 + paddedLen
+}

@@ -27,3 +27,9 @@ func (b *Bool) UnmarshalNix(raw []byte) error {
 	*b = i.Value != 0
 	return nil
 }
+
+// Size returns the size of the pseudo-boolean in bytes.
+func (b Bool) Size() uint64 {
+	return primitive.NewInt(uint64(0)).Size()
+}
+

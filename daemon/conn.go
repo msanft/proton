@@ -15,13 +15,15 @@ type Conn struct {
 	r io.Reader
 	w io.Writer
 
+	stderr io.Writer
+
 	// PeerVersion is the Nix version used by the other end of the connection.
 	PeerVersion string
 }
 
 // NewConn establishes a connection to a Nix daemon through the given connection.
-func NewConn(r io.Reader, w io.Writer) (*Conn, error) {
-	c := &Conn{r: r, w: w}
+func NewConn(r io.Reader, w io.Writer, stderr io.Writer) (*Conn, error) {
+	c := &Conn{r: r, w: w, stderr: stderr}
 	err := c.shakeHands()
 	if err != nil {
 		return nil, fmt.Errorf("performing handshake: %w", err)
@@ -64,7 +66,7 @@ func (c *Conn) readNNix(data nixUnmarshalable, n int) error {
 	if err != nil {
 		return fmt.Errorf("reading data: %w", err)
 	}
-	// fmt.Printf("Read %x\n", buf)
+	//fmt.Printf("Read %x\n", buf)
 	if err = data.UnmarshalNix(buf); err != nil {
 		return fmt.Errorf("unmarshaling data: %w", err)
 	}

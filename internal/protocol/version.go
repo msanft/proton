@@ -50,3 +50,8 @@ func (v *Version) UnmarshalNix(raw []byte) error {
 func (v Version) String() string {
 	return fmt.Sprintf("v%d.%d", v.major, v.minor)
 }
+
+// Size returns the size of the protocol version in bytes.
+func (v Version) Size() uint64 {
+	return primitive.NewInt(uint64(0)).Size()
+}

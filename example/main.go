@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/msanft/proton/daemon"
@@ -21,7 +22,7 @@ func main() {
 		panic(err)
 	}
 
-	daemonConn, err := daemon.NewConn(stdout, stdin)
+	daemonConn, err := daemon.NewConn(stdout, stdin, os.Stdout)
 	if err != nil {
 		panic(err)
 	}
@@ -29,7 +30,7 @@ func main() {
 	storePaths := []string{
 		"/nix/store/yda60ngw0yiknd3xx1yrszkv2s6askrf-libcap-2.69-man",
 		"/nix/store/yrik1ppdagk2y6pn3yaly2lz90ll92v2-cargo-package-libc-0.2.foo",
-		// "/abc", // TODO: Add the error handling for this
+		"/abc",
 	}
 
 	for _, path := range storePaths {
@@ -39,11 +40,4 @@ func main() {
 		}
 		fmt.Printf("%s is valid: %t\n", path, valid)
 	}
-
-	b := make([]byte, 1024)
-	n, err := stdout.Read(b)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Read", b[:n])
 }

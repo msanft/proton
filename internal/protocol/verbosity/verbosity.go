@@ -29,3 +29,8 @@ func (v *Verbosity) UnmarshalNix(raw []byte) error {
 	*v = Verbosity(i.Value)
 	return nil
 }
+
+// Size returns the size of the verbosity level in bytes.
+func (v Verbosity) Size() uint64 {
+	return primitive.NewInt(uint64(v)).Size()
+}

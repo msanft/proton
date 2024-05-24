@@ -50,3 +50,8 @@ func (o *Opcode) UnmarshalNix(raw []byte) error {
 	*o = Opcode(i.Value)
 	return nil
 }
+
+// Size returns the size of the opcode in bytes.
+func (o Opcode) Size() uint64 {
+	return primitive.NewInt(uint64(o)).Size()
+}
